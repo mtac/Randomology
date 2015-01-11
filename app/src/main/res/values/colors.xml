@@ -1,0 +1,8 @@
+<resources>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="app_background">#ff009688</color>
+    <color name="title_color">#ff99cc00</color>
+    <color name="title_color_translucent">#9999cc00</color>
+
+</resources>
