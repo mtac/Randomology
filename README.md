@@ -1,0 +1,2 @@
+# Randomology
+Randomology Android App
