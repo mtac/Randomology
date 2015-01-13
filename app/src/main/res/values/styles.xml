@@ -3,24 +3,36 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@drawable/bg</item>
+
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/primary_color</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated,
+             which is used to tint widgets -->
+        <item name="colorAccent">@color/color_accent</item>
+
+        <!-- You can also set colorControlNormal, colorControlActivated
+             colorControlHighlight, and colorSwitchThumbNormal. -->
+
     </style>
 
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="metaButtonBarStyle">@style/ButtonBar</item>
-        <item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>
+        <item name="android:windowBackground">@drawable/bg</item>
     </style>
 
-    <style name="ButtonBar">
-        <item name="android:paddingLeft">2dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingRight">2dp</item>
-        <item name="android:paddingBottom">0dp</item>
-        <item name="android:background">@android:drawable/bottom_bar</item>
+    <style name="Text.Button" parent="android:style/Widget.Material.Button">
+        <item name="android:background">@drawable/text_button_background</item>
+        <item name="android:colorBackground">@color/text_button_color</item>
     </style>
 
-    <style name="ButtonBarButton" />
+    <style name="Call.Button" parent="android:style/Widget.Material.Button">
+        <item name="android:background">@drawable/call_button_background</item>
+        <item name="android:colorBackground">@color/call_button_color</item>
+    </style>
 
 </resources>

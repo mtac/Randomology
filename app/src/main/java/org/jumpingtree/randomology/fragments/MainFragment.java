@@ -30,8 +30,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private OnSendSMSListener mCallback;
     private Button btn_call, btn_text;
-    private ImageView logo;
-    private TextView debugTextResult;
     private List<String> contacts;
     public Context mContext;
 
@@ -51,8 +49,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         btn_call        = (Button)      rootView.findViewById(R.id.button_call);
         btn_text        = (Button)      rootView.findViewById(R.id.button_text);
-        logo            = (ImageView)   rootView.findViewById(R.id.app_logo);
-        debugTextResult = (TextView)    rootView.findViewById(R.id.debugTextResult);
 
         btn_call.setOnClickListener(this);
         btn_text.setOnClickListener(this);
@@ -89,13 +85,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 btn_call.setEnabled(true);
                 break;
             case R.id.button_text:
-                debugTextResult.setText("");
                 if (!contacts.isEmpty()){
                     int pos = CommonUtilities.getRandomIntInRange(0,contacts.size() - 1);
                     String selected_contact = contacts.get(pos);
-                    debugTextResult.setText("Random Contact:\n" + selected_contact);
+                    // mCallback.sendSMS("916427929", "Olha isto a bombear um SMS ao carregar num botão! :P");
                 }
-               // mCallback.sendSMS("916427929", "Olha isto a bombear um SMS ao carregar num botão! :P");
                 break;
 
             default:
@@ -116,9 +110,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
             if(btn_text != null) {
                 btn_text.setEnabled(false);
-            }
-            if(logo != null) {
-                logo.setImageDrawable(logo.getContext().getResources().getDrawable(android.R.drawable.stat_notify_sync));
             }
             super.onPreExecute();
         }
@@ -169,9 +160,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
             if(btn_text != null) {
                 btn_text.setEnabled(true);
-            }
-            if(logo != null) {
-                logo.setImageDrawable(logo.getContext().getResources().getDrawable(android.R.drawable.stat_notify_sync_noanim));
             }
             super.onPostExecute(result);
         }
