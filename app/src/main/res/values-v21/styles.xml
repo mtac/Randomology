@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@drawable/bg</item>
+
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/primary_color</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated,
+             which is used to tint widgets -->
+        <item name="colorAccent">@color/color_accent</item>
+
+        <!-- You can also set colorControlNormal, colorControlActivated
+             colorControlHighlight, and colorSwitchThumbNormal. -->
+
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="MyActionBar"
+        parent="android:style/Widget.Material.ActionBar">
+        <item name="android:background">@color/primary_color</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+    </style>
+
+    <style name="TextButton" parent="android:style/Widget.Material.Button">
+        <item name="android:background">@drawable/text_button_background</item>
+    </style>
+
+    <style name="CallButton" parent="android:style/Widget.Material.Button">
+        <item name="android:background">@drawable/call_button_background</item>
+    </style>
+
+    <style name="DefaultButton" parent="android:style/Widget.Material.Button">
+        <item name="android:background">@drawable/default_button_background</item>
+    </style>
+
+    <!-- LOADING content -->
+    <style name="Loading_Transparent" parent="@android:style/Theme.Translucent.NoTitleBar"></style>
+    <style name="Loading" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:background">@color/black_overlay</item>
+    </style>
+
+</resources>
