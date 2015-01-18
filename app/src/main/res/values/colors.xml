@@ -11,5 +11,8 @@
     <color name="call_button_color">#A1DECB</color>
     <color name="text_button_color">#F9DC85</color>
     <color name="button_shadow_color">#1F000000</color> <!-- Alpha: 12% -->
+    <color name="default_button_color">#F9A285</color>
+
+    <color name="loadingBackground_translucent">#99FFFFFF</color>
 
 </resources>

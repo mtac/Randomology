@@ -20,19 +20,33 @@
 
     </style>
 
+    <!-- ActionBar styles -->
+    <style name="MyActionBar"
+        parent="android:style/Widget.Material.Button">
+        <item name="android:background">@color/primary_color</item>
+    </style>
+
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@drawable/bg</item>
+        <item name="android:windowBackground">@drawable/bg_splash</item>
     </style>
 
-    <style name="Text.Button" parent="android:style/Widget.Material.Button">
+    <style name="TextButton">
         <item name="android:background">@drawable/text_button_background</item>
-        <item name="android:colorBackground">@color/text_button_color</item>
     </style>
 
-    <style name="Call.Button" parent="android:style/Widget.Material.Button">
+    <style name="CallButton">
         <item name="android:background">@drawable/call_button_background</item>
-        <item name="android:colorBackground">@color/call_button_color</item>
+    </style>
+
+    <style name="DefaultButton">
+        <item name="android:background">@drawable/default_button_background</item>
+    </style>
+
+    <!-- LOADING content -->
+    <style name="Loading_Transparent" parent="@android:style/Theme.Translucent.NoTitleBar"></style>
+    <style name="Loading" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:background">@color/black_overlay</item>
     </style>
 
 </resources>

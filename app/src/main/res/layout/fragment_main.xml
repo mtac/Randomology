@@ -15,24 +15,34 @@
         android:layout_centerInParent="true" >
 
         <Button
-            style="@style/Call.Button"
+            style="@style/CallButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/buttons_height"
             android:text="@string/random_call"
             android:textColor="@color/main_text_color"
             android:textSize="@dimen/buttons_text_size"
+            android:textAllCaps="false"
             android:id="@+id/button_call"
+            android:drawableLeft="@drawable/ic_phone"
+            android:drawablePadding="-20dp"
+            android:paddingLeft="20dp"
+            android:singleLine="true"
             android:layout_alignParentTop="true" />
 
         <Button
-            style="@style/Text.Button"
+            style="@style/TextButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/buttons_height"
             android:layout_marginTop="14dp"
             android:text="@string/random_text"
             android:textColor="@color/main_text_color"
             android:textSize="@dimen/buttons_text_size"
+            android:textAllCaps="false"
             android:id="@+id/button_text"
+            android:drawableLeft="@drawable/ic_text"
+            android:drawablePadding="-20dp"
+            android:paddingLeft="20dp"
+            android:singleLine="true"
             android:layout_below="@+id/button_call" />
     </RelativeLayout>
 
@@ -48,7 +58,7 @@
             android:id="@+id/app_logo"
             android:layout_width="@dimen/app_logo_size"
             android:layout_height="@dimen/app_logo_size"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/logo_vertical_margin"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/app_name"

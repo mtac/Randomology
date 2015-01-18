@@ -17,6 +17,8 @@ public class CommonUtilities {
 	
 	private final static String TAG = "CommonUtilities";
 
+    public static final int INVALID_ID = -1;
+
 	/**
 	 * This method converts dp unit to equivalent pixels, depending on device density. 
 	 * 
@@ -43,19 +45,6 @@ public class CommonUtilities {
 	    DisplayMetrics metrics = resources.getDisplayMetrics();
 	    float dp = px / (metrics.densityDpi / 160f);
 	    return dp;
-	}
-	
-	public static boolean isValidEmail(CharSequence target) {
-	    if (target == null) {
-	    	Logger.log(LogLevel.DEBUG, TAG, "EMAIL VALIDATION - Email is null...");
-	        return false;
-	    } else {
-	    	long time = System.currentTimeMillis();
-	    	boolean result = android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-	    	android.util.Patterns.EMAIL_ADDRESS.matcher(target).reset();
-	    	Logger.log(LogLevel.DEBUG, TAG, "EMAIL VALIDATION - Email is " + (result ? "valid!":"invalid!") + " ["+(System.currentTimeMillis() - time)+"ms]");
-	        return result;
-	    }
 	}
 	
 	public static String getDeviceId(Context context) {

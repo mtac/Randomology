@@ -7,12 +7,17 @@ import org.jumpingtree.randomology.utils.CommonUtilities;
 import org.jumpingtree.randomology.utils.Logger;
 import org.jumpingtree.randomology.utils.Logger.LogLevel;
 
+import java.util.List;
+
 /**
  * Created by Miguel on 08/01/2015.
  */
 public class RDApplication extends Application {
+
     public static final String APP_TAG = "Randomology Android Application";
-    private final String TAG = "RDApplication";
+    private static final String TAG = "RDApplication";
+
+    private static List<String> contacts;
 
     @Override
     public void onCreate() {
@@ -25,4 +30,11 @@ public class RDApplication extends Application {
         Logger.log(LogLevel.INFO, TAG,  "Application Version: " + CommonUtilities.getApplicationVersion(getApplicationContext()));
     }
 
+    public static List<String> getContacts() {
+        return contacts;
+    }
+
+    public static void setContacts(List<String> contacts) {
+        RDApplication.contacts = contacts;
+    }
 }

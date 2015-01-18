@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,7 +19,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.jumpingtree.randomology.R;
+import org.jumpingtree.randomology.RDApplication;
 import org.jumpingtree.randomology.utils.CommonUtilities;
+import org.jumpingtree.randomology.utils.DialogManager;
 import org.jumpingtree.randomology.utils.Logger;
 import org.jumpingtree.randomology.utils.Logger.LogLevel;
 
@@ -27,6 +32,8 @@ import java.util.List;
  * Created by Miguel on 08/01/2015.
  */
 public class MainFragment extends Fragment implements View.OnClickListener {
+
+    private static final String TAG = "MainFragment";
 
     private OnSendSMSListener mCallback;
     private Button btn_call, btn_text;
@@ -53,9 +60,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         btn_call.setOnClickListener(this);
         btn_text.setOnClickListener(this);
 
-        contacts = new ArrayList<String>();
-
-        getContactList();
+        contacts = RDApplication.getContacts();
+        if(contacts == null){
+            contacts = new ArrayList<String>();
+        }
 
         return rootView;
     }
@@ -81,14 +89,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.button_call:
                 btn_call.setEnabled(false);
-                mCallback.startCall("916427929");
+                //mCallback.startCall("916427929");//Miguel
+                mCallback.startCall("914314824");//Morais
                 btn_call.setEnabled(true);
                 break;
             case R.id.button_text:
                 if (!contacts.isEmpty()){
                     int pos = CommonUtilities.getRandomIntInRange(0,contacts.size() - 1);
                     String selected_contact = contacts.get(pos);
-                    // mCallback.sendSMS("916427929", "Olha isto a bombear um SMS ao carregar num botão! :P");
+                    DialogManager.showMessagePromptAlertDialog(getActivity(), mCallback, selected_contact);
                 }
                 break;
 
@@ -97,71 +106,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void getContactList(){
-        new GetContactsTask().execute();
-    }
-
-    private class GetContactsTask extends AsyncTask<Void, Void, List<String>> {
-
+    private View.OnClickListener buttonSendListener = new View.OnClickListener() {
         @Override
-        protected void onPreExecute() {
-            if(btn_call != null) {
-                btn_call.setEnabled(false);
-            }
-            if(btn_text != null) {
-                btn_text.setEnabled(false);
-            }
-            super.onPreExecute();
-        }
+        public void onClick(View v) {
 
+        }
+    };
+
+    private View.OnClickListener buttonFeelingLuckyListener = new View.OnClickListener() {
         @Override
-        protected List<String> doInBackground(Void... params) {
-            ArrayList<String> numbers = new ArrayList<String>();
+        public void onClick(View v) {
 
-            ContentResolver cr = mContext.getContentResolver();
-            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                    null, null, null, null);
-            if (cur.getCount() > 0) {
-                while (cur.moveToNext()) {
-                    String id = cur.getString(
-                            cur.getColumnIndex(ContactsContract.Contacts._ID));
-                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                        Cursor pCur = cr.query(
-                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                null,
-                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
-                                new String[]{id}, null);
-                        while (pCur.moveToNext()) {
-                            String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                            //Remove non numeric or plus chars
-                            phone = phone.replaceAll("[^\\d+]", "");
-
-                            numbers.add(phone.trim());
-                            Logger.log(LogLevel.DEBUG, "MainFragment", "Number: " + phone.trim());
-                        }
-                        pCur.close();
-                    }
-                }
-            }
-            if (!cur.isClosed()) {
-                cur.close();
-            }
-            return numbers;
         }
+    };
 
-        @Override
-        protected void onPostExecute(List<String> result) {
-            if (result != null && !result.isEmpty()) {
-                contacts = result;
-            }
-            if(btn_call != null) {
-                btn_call.setEnabled(true);
-            }
-            if(btn_text != null) {
-                btn_text.setEnabled(true);
-            }
-            super.onPostExecute(result);
-        }
-    }
 }

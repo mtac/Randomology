@@ -7,6 +7,16 @@
     <string name="loading">Loading</string>
     <string name="random_call">Random Call</string>
     <string name="random_text">Random Text</string>
+    <string name="msg_send">Send</string>
+    <string name="msg_sent">SMS Sent!</string>
+    <string name="feeling_lucky">Feeling Lucky!</string>
+    <string name="msg_prompt_text">Do you want to type the text yourself, or are you feeling lucky?</string>
     <string name="app_message">Make a random call or send a random text to one of your friends and see what happens next!</string>
-
+    <string name="msg0">Hey! Check out Randomology in the Play Store! It is awesome!</string>
+    <string name="msg1">When Bruce Banner gets mad, he turns into the Hulk. When the Hulk gets mad, he turns into Chuck Norris.</string>
+    <string name="msg2">When Chuck Norris talks, everybody listens. And dies.</string>
+    <string name="msg3">Bill Gates thinks he\'s Chuck Norris. Chuck Norris actually laughed. Once.</string>
+    <string name="msg4">Chuck Norris ordered a Big Mac at Burger King, and got one.</string>
+    <string name="msg5">Chuck Norris sleeps with a pillow under his gun.</string>
+    <string name="banner_ad_unit_id">ca-app-pub-2036760322507923/3095651771</string>
 </resources>
