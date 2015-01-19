@@ -43,10 +43,17 @@
         <item name="android:background">@drawable/default_button_background</item>
     </style>
 
-    <!-- LOADING content -->
-    <style name="Loading_Transparent" parent="@android:style/Theme.Translucent.NoTitleBar"></style>
-    <style name="Loading" parent="@android:style/Theme.Translucent.NoTitleBar">
-        <item name="android:background">@color/black_overlay</item>
+    <!-- Contacts list content -->
+    <style name="ContactListView">
+        <item name="android:verticalScrollbarPosition">right</item>
+        <item name="android:fastScrollAlwaysVisible">true</item>
+        <item name="android:scrollbarStyle">outsideInset</item>
+    </style>
+
+    <style name="listViewActivatedStyle"/>
+
+    <style name="quickContactBadgeStyle">
+        <item name="android:background">@drawable/ic_logo</item>
     </style>
 
 </resources>

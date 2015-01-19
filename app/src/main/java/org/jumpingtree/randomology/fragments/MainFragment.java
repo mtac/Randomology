@@ -35,18 +35,26 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "MainFragment";
 
-    private OnSendSMSListener mCallback;
+    private MainOptions mCallback;
     private Button btn_call, btn_text;
     private List<String> contacts;
     public Context mContext;
 
     // Container Activity must implement this interface
-    public interface OnSendSMSListener {
+    public interface MainOptions {
         public void sendSMS(String phoneNumber, String message);
         public void startCall(String phoneNumber);
+        public void openSettings();
     }
 
     public MainFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Let this fragment contribute menu items
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -75,7 +83,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mCallback = (OnSendSMSListener) activity;
+            mCallback = (MainOptions) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnSendMessageListener");
@@ -106,18 +114,26 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private View.OnClickListener buttonSendListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_main, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            mCallback.openSettings();
+            return true;
         }
-    };
 
-    private View.OnClickListener buttonFeelingLuckyListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-        }
-    };
+        return super.onOptionsItemSelected(item);
+    }
 
 }

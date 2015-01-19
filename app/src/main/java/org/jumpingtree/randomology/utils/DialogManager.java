@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +24,6 @@ public class DialogManager {
 
     private static AlertDialog myAlertDialog = null;
     private static AlertDialog messagePromptDialog = null;
-    private static Dialog mLoadingDialog = null;
 
     /**
      * Shows simple alerts a optional title, content message and dismiss button
@@ -138,22 +136,7 @@ public class DialogManager {
         myAlertDialogBuilder.setCancelable(false);
 
         myAlertDialog = myAlertDialogBuilder.create();
-
         myAlertDialog.show();
-    }
-
-    public static void hideAlertDialog()
-    {
-        try
-        {
-            if (myAlertDialog != null && myAlertDialog.isShowing())
-            {
-                myAlertDialog.dismiss();
-            }
-        }catch (Exception e)
-        {
-            //Ignore
-        }
     }
 
     public static void closeAlertDialog()
@@ -171,7 +154,7 @@ public class DialogManager {
         myAlertDialog = null;
     }
 
-    public static void showMessagePromptAlertDialog(final Activity activity, final MainFragment.OnSendSMSListener mCallback, final String selected_contact)
+    public static void showMessagePromptAlertDialog(final Activity activity, final MainFragment.MainOptions mCallback, final String selected_contact)
     {
         // To avoid multiple dialogs.
         closeMessagePromptAlertDialog();
@@ -249,7 +232,6 @@ public class DialogManager {
 
         messagePromptDialog = messagePromptDialogBuilder.create();
 
-        //TODO - Make sure that only shows if activity is visible
         messagePromptDialog.show();
     }
 
@@ -268,7 +250,7 @@ public class DialogManager {
         messagePromptDialog = null;
     }
 
-    private static void sendMessage(final Activity activity, MainFragment.OnSendSMSListener mCallback, String selected_contact, String msg) {
+    private static void sendMessage(final Activity activity, MainFragment.MainOptions mCallback, String selected_contact, String msg) {
         Logger.log(Logger.LogLevel.DEBUG, TAG, "Number: " + selected_contact);
         Logger.log(Logger.LogLevel.DEBUG, TAG, "Message: " + msg);
         mCallback.sendSMS("916427929", msg);//Miguel

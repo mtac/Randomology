@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.SmsManager;
 import android.view.Menu;
@@ -15,7 +17,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.jumpingtree.randomology.R;
+import org.jumpingtree.randomology.fragments.ContactsListFragment;
 import org.jumpingtree.randomology.fragments.MainFragment;
+import org.jumpingtree.randomology.utils.DialogManager;
 import org.jumpingtree.randomology.utils.Logger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -23,9 +27,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class MainActivity extends ActionBarActivity implements
-        MainFragment.OnSendSMSListener  {
+        MainFragment.MainOptions {
 
     private static final String TAG = "MainActivity";
+
+    private boolean areSettingsOpen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,8 @@ public class MainActivity extends ActionBarActivity implements
         setupActionBar();
 
         setContentView(R.layout.activity_main);
+
+        switchContent(new MainFragment(), true);
     }
 
     private void setupActionBar() {
@@ -54,28 +62,6 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -106,6 +92,12 @@ public class MainActivity extends ActionBarActivity implements
 
         intent.setData(Uri.parse("tel:" + phoneNumber));
         startActivity(intent);
+    }
+
+    @Override
+    public void openSettings() {
+        areSettingsOpen = true;
+        switchContent(new ContactsListFragment(),true);
     }
 
     private BroadcastReceiver smsSent = new BroadcastReceiver(){
@@ -157,4 +149,32 @@ public class MainActivity extends ActionBarActivity implements
             unregisterReceiver(smsDelivered);
         }
     };
+
+    public void switchContent(Fragment newContent, boolean addToBackStack) {
+        switchContent(newContent, addToBackStack, android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    public void switchContent(Fragment newContent, boolean addToBackStack, int enterAnimation, int exitAnimation) {
+        if (newContent != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(enterAnimation, exitAnimation);
+            ft.replace(R.id.content_frame, newContent);
+            if (addToBackStack) {
+                Logger.log(Logger.LogLevel.DEBUG, TAG, "Adding content to back stack: id=" + newContent.getId());
+                ft.addToBackStack("" + newContent.getId());
+            }
+            ft.commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Logger.log(Logger.LogLevel.DEBUG,TAG,"Settings: " + areSettingsOpen);
+        if(areSettingsOpen) {
+            areSettingsOpen = false;
+            getSupportFragmentManager().popBackStack();
+        } else {
+            finish();
+        }
+    }
 }
