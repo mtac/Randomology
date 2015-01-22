@@ -15,23 +15,23 @@
   limitations under the License.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <!-- Use standard android.R class list id instead of app specific id. This is just useful for
          consistency. -->
     <ListView android:id="@id/android:list"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              style="@style/ContactListView"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/ContactListView"/>
 
     <!-- Use standard android.R class empty id instead of app specific id. This is just useful for
      consistency. -->
     <TextView android:id="@id/android:empty"
-              android:gravity="center"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:text="@string/no_contacts"
-              android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_contacts_in_black_list"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
 </FrameLayout>

@@ -1,9 +1,12 @@
 package org.jumpingtree.randomology.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -11,6 +14,8 @@ import android.view.animation.AlphaAnimation;
 
 import org.jumpingtree.randomology.utils.Logger.LogLevel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class CommonUtilities {
@@ -120,6 +125,49 @@ public class CommonUtilities {
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
         return rand.nextInt((max - min) + 1) + min;
+    }
+
+    public static List<String> getContactNumbersList(Context context) {
+        ArrayList<String> numbers = new ArrayList<String>();
+
+        ContentResolver cr = context.getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
+        if (cur.getCount() > 0) {
+            while (cur.moveToNext()) {
+                String id = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts._ID));
+                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                    Cursor pCur = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
+                            new String[]{id}, null);
+                    while (pCur.moveToNext()) {
+                        String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                        //Remove non numeric or plus chars
+                        phone = phone.replaceAll("[^\\d+]", "");
+
+                        numbers.add(phone.trim());
+                        //Logger.log(LogLevel.DEBUG, "MainFragment", "Number: " + phone.trim());
+                    }
+                    pCur.close();
+                }
+            }
+        }
+        if (!cur.isClosed()) {
+            cur.close();
+        }
+        return numbers;
+    }
+
+    public static String getContactSelectionQueryForList(List<String> list) {
+        String query = "";
+
+
+
+        return query;
     }
 
     /**

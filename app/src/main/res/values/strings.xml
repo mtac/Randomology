@@ -3,10 +3,12 @@
 
     <string name="app_name">Randomology</string>
     <string name="action_settings">Settings</string>
+    <string name="action_add">Add</string>
     <string name="title_activity_splashscreen">SplashscreenActivity</string>
     <string name="loading">Loading</string>
     <string name="random_call">Random Call</string>
     <string name="random_text">Random Text</string>
+    <string name="delete">Delete</string>
     <string name="msg_send">Send</string>
     <string name="msg_sent">SMS Sent!</string>
     <string name="feeling_lucky">Feeling Lucky!</string>
@@ -19,6 +21,9 @@
     <string name="msg4">Chuck Norris ordered a Big Mac at Burger King, and got one.</string>
     <string name="msg5">Chuck Norris sleeps with a pillow under his gun.</string>
     <string name="banner_ad_unit_id">ca-app-pub-2036760322507923/3095651771</string>
+
+    <string name="black_list">Black List</string>
+    <string name="no_contacts_in_black_list">Great!\nYou didn\'t block contacts yet!</string>
 
     <string name="no_contacts">No Contacts Found</string>
     <string name="no_contact_selected">No Contact Selected</string>

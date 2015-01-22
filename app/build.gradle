@@ -24,6 +24,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.+'
     compile 'com.android.support:support-v4:21.0.+'
     compile 'com.google.android.gms:play-services:6.5.87'
-    compile 'uk.co.chrisjenx:calligraphy:2.0.0-SNAPSHOT'
+    compile 'uk.co.chrisjenx:calligraphy:2.0.0'
     compile 'org.quanqi:CircularProgress:1.0.2'
 }

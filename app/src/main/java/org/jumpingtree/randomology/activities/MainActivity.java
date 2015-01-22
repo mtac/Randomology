@@ -12,14 +12,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.SmsManager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.jumpingtree.randomology.R;
 import org.jumpingtree.randomology.fragments.ContactsListFragment;
 import org.jumpingtree.randomology.fragments.MainFragment;
-import org.jumpingtree.randomology.utils.DialogManager;
 import org.jumpingtree.randomology.utils.Logger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -30,8 +27,6 @@ public class MainActivity extends ActionBarActivity implements
         MainFragment.MainOptions {
 
     private static final String TAG = "MainActivity";
-
-    private boolean areSettingsOpen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +40,6 @@ public class MainActivity extends ActionBarActivity implements
         setupActionBar();
 
         setContentView(R.layout.activity_main);
-
-        switchContent(new MainFragment(), true);
     }
 
     private void setupActionBar() {
@@ -96,8 +89,9 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void openSettings() {
-        areSettingsOpen = true;
-        switchContent(new ContactsListFragment(),true);
+        Intent blackListIntent = new Intent(getApplicationContext(), BlackListActivity.class);
+        startActivity(blackListIntent);
+        //overridePendingTransition(R.anim.slide_in_top, R.anim.slide_out_top);
     }
 
     private BroadcastReceiver smsSent = new BroadcastReceiver(){
@@ -149,32 +143,4 @@ public class MainActivity extends ActionBarActivity implements
             unregisterReceiver(smsDelivered);
         }
     };
-
-    public void switchContent(Fragment newContent, boolean addToBackStack) {
-        switchContent(newContent, addToBackStack, android.R.anim.fade_in, android.R.anim.fade_out);
-    }
-
-    public void switchContent(Fragment newContent, boolean addToBackStack, int enterAnimation, int exitAnimation) {
-        if (newContent != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(enterAnimation, exitAnimation);
-            ft.replace(R.id.content_frame, newContent);
-            if (addToBackStack) {
-                Logger.log(Logger.LogLevel.DEBUG, TAG, "Adding content to back stack: id=" + newContent.getId());
-                ft.addToBackStack("" + newContent.getId());
-            }
-            ft.commit();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Logger.log(Logger.LogLevel.DEBUG,TAG,"Settings: " + areSettingsOpen);
-        if(areSettingsOpen) {
-            areSettingsOpen = false;
-            getSupportFragmentManager().popBackStack();
-        } else {
-            finish();
-        }
-    }
 }

@@ -40,7 +40,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private List<String> contacts;
     public Context mContext;
 
-    // Container Activity must implement this interface
     public interface MainOptions {
         public void sendSMS(String phoneNumber, String message);
         public void startCall(String phoneNumber);

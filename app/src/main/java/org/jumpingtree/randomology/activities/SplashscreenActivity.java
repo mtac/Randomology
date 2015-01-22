@@ -16,6 +16,7 @@ import android.view.Window;
 
 import org.jumpingtree.randomology.R;
 import org.jumpingtree.randomology.RDApplication;
+import org.jumpingtree.randomology.utils.CommonUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,38 +47,7 @@ public class SplashscreenActivity extends Activity {
 
         @Override
         protected List<String> doInBackground(Void... params) {
-            ArrayList<String> numbers = new ArrayList<String>();
-
-            ContentResolver cr = getApplicationContext().getContentResolver();
-            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                    null, null, null, null);
-            if (cur.getCount() > 0) {
-                while (cur.moveToNext()) {
-                    String id = cur.getString(
-                            cur.getColumnIndex(ContactsContract.Contacts._ID));
-                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                        Cursor pCur = cr.query(
-                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                null,
-                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
-                                new String[]{id}, null);
-                        while (pCur.moveToNext()) {
-                            String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                            //Remove non numeric or plus chars
-                            phone = phone.replaceAll("[^\\d+]", "");
-
-                            numbers.add(phone.trim());
-                            //Logger.log(LogLevel.DEBUG, "MainFragment", "Number: " + phone.trim());
-                        }
-                        pCur.close();
-                    }
-                }
-            }
-            if (!cur.isClosed()) {
-                cur.close();
-            }
-            return numbers;
+            return CommonUtilities.getContactNumbersList(getApplicationContext());
         }
 
         @Override
