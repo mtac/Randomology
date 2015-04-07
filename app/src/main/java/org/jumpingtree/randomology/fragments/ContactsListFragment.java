@@ -16,8 +16,6 @@
 
 package org.jumpingtree.randomology.fragments;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -72,8 +70,31 @@ public class ContactsListFragment extends ListFragment implements
     // Defines a tag for identifying log entries
     private static final String TAG = "ContactsListFragment";
 
+    // Bundle key for saving previously selected search result item
+    private static final String STATE_PREVIOUSLY_SELECTED_KEY =
+            "org.jumpingtree.randomology.SELECTED_ITEM";
+
     private ContactsAdapter mAdapter; // The main query adapter
     private ImageLoader mImageLoader; // Handles loading the contact image in a background thread
+    private String mSearchTerm; // Stores the current search query term
+
+    // Contact selected listener that allows the activity holding this fragment to be notified of
+    // a contact being selected
+    private OnContactsInteractionListener mOnContactSelectedListener;
+
+    // Stores the previously selected search item so that on a configuration change the same item
+    // can be reselected again
+    private int mPreviouslySelectedSearchItem = 0;
+
+    // Whether or not the search query has changed since the last time the loader was refreshed
+    private boolean mSearchQueryChanged;
+
+    // Whether or not this fragment is showing in a two-pane layout
+    private boolean mIsTwoPaneLayout;
+
+    // Whether or not this is a search result view of this fragment, only used on pre-honeycomb
+    // OS versions as search results are shown in-line via Action Bar search from honeycomb onward
+    private boolean mIsSearchResultView = false;
 
     /**
      * Fragments require an empty constructor.
@@ -90,17 +111,6 @@ public class ContactsListFragment extends ListFragment implements
         // Create the main contacts adapter
         mAdapter = new ContactsAdapter(getActivity());
 
-        /*
-         * An ImageLoader object loads and resizes an image in the background and binds it to the
-         * QuickContactBadge in each item layout of the ListView. ImageLoader implements memory
-         * caching for each image, which substantially improves refreshes of the ListView as the
-         * user scrolls through it.
-         *
-         * To learn more about downloading images asynchronously and caching the results, read the
-         * Android training class Displaying Bitmaps Efficiently.
-         *
-         * http://developer.android.com/training/displaying-bitmaps/
-         */
         mImageLoader = new ImageLoader(getActivity(), getListPreferredItemHeight()) {
             @Override
             protected Bitmap processBitmap(Object data) {
@@ -119,7 +129,7 @@ public class ContactsListFragment extends ListFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         // Inflate the list fragment layout
         return inflater.inflate(R.layout.contact_list_fragment, container, false);
     }
@@ -149,6 +159,23 @@ public class ContactsListFragment extends ListFragment implements
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            // Assign callback listener which the holding activity must implement. This is used
+            // so that when a contact item is interacted with (selected by the user) the holding
+            // activity will be notified and can take further action such as populating the contact
+            // detail pane (if in multi-pane layout) or starting a new activity with the contact
+            // details (single pane layout).
+            mOnContactSelectedListener = (OnContactsInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnContactsInteractionListener");
+        }
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
 
@@ -170,7 +197,11 @@ public class ContactsListFragment extends ListFragment implements
                 cursor.getLong(ContactsQuery.ID),
                 cursor.getString(ContactsQuery.LOOKUP_KEY));
 
-        //TODO: Do something with the contact, add to blacklist...
+        // Notifies the parent activity that the user selected a contact. In a two-pane layout, the
+        // parent activity loads a ContactDetailFragment that displays the details for the selected
+        // contact. In a single-pane layout, the parent activity starts a new activity that
+        // displays contact details in its own Fragment.
+        mOnContactSelectedListener.onContactSelected(uri);
     }
 
     /**
@@ -179,6 +210,9 @@ public class ContactsListFragment extends ListFragment implements
      * contact should no longer be selected.
      */
     private void onSelectionCleared() {
+        // Uses callback to notify activity this contains this fragment
+        mOnContactSelectedListener.onSelectionCleared();
+
         // Clears currently checked item
         getListView().clearChoices();
     }
@@ -195,6 +229,8 @@ public class ContactsListFragment extends ListFragment implements
             // one which filters contacts by a search query. If mSearchTerm is set
             // then a search query has been entered and the latter should be used.
 
+            // Since there's no search string, use the content URI that searches the entire
+            // Contacts table
             contentUri = ContactsQuery.CONTENT_URI;
 
             // Returns a new CursorLoader for querying the Contacts table. No arguments are used
@@ -335,14 +371,12 @@ public class ContactsListFragment extends ListFragment implements
 
     /**
      * This is a subclass of CursorAdapter that supports binding Cursor columns to a view layout.
-     * If those items are part of search results, the search string is marked by highlighting the
-     * query text. An {@link AlphabetIndexer} is used to allow quicker navigation up and down the
+     * An {@link AlphabetIndexer} is used to allow quicker navigation up and down the
      * ListView.
      */
     private class ContactsAdapter extends CursorAdapter implements SectionIndexer {
         private LayoutInflater mInflater; // Stores the layout inflater
         private AlphabetIndexer mAlphabetIndexer; // Stores the AlphabetIndexer instance
-        private TextAppearanceSpan highlightTextSpan; // Stores the highlight text appearance style
 
         /**
          * Instantiates a new Contacts Adapter.
@@ -364,10 +398,6 @@ public class ContactsListFragment extends ListFragment implements
             // Instantiates a new AlphabetIndexer bound to the column used to sort contact names.
             // The cursor is left null, because it has not yet been retrieved.
             mAlphabetIndexer = new AlphabetIndexer(null, ContactsQuery.SORT_KEY, alphabet);
-
-            // Defines a span for highlighting the part of a display name that matches the search
-            // string
-            highlightTextSpan = new TextAppearanceSpan(getActivity(), android.R.style.TextAppearance_SuggestionHighlight);
         }
 
         /**
@@ -410,10 +440,7 @@ public class ContactsListFragment extends ListFragment implements
 
             final String displayName = cursor.getString(ContactsQuery.DISPLAY_NAME);
 
-            // If the user didn't do a search, or the search string didn't match a display
-            // name, show the display name without highlighting
             holder.text1.setText(displayName);
-            holder.text2.setVisibility(View.GONE);
 
             // Processes the QuickContactBadge. A QuickContactBadge first appears as a contact's
             // thumbnail image with styling that indicates it can be touched for additional
@@ -537,21 +564,18 @@ public class ContactsListFragment extends ListFragment implements
         // restrict results to contacts that have a display name and are linked to visible groups.
         // Notice that the search on the string provided by the user is implemented by appending
         // the search string to CONTENT_FILTER_URI.
-        @SuppressLint("InlinedApi")
         final static String SELECTION =
                 (CommonUtilities.hasHoneycomb() ? Contacts.DISPLAY_NAME_PRIMARY : Contacts.DISPLAY_NAME) +
-                "<>''" + " AND " + Contacts.IN_VISIBLE_GROUP + "=1";
+                        "<>''" + " AND " + Contacts.IN_VISIBLE_GROUP + "=1";
 
         // The desired sort order for the returned Cursor. In Android 3.0 and later, the primary
         // sort key allows for localization. In earlier versions. use the display name as the sort
         // key.
-        @SuppressLint("InlinedApi")
         final static String SORT_ORDER =
                 CommonUtilities.hasHoneycomb() ? Contacts.SORT_KEY_PRIMARY : Contacts.DISPLAY_NAME;
 
         // The projection for the CursorLoader query. This is a list of columns that the Contacts
         // Provider should return in the Cursor.
-        @SuppressLint("InlinedApi")
         final static String[] PROJECTION = {
 
                 // The contact's row id

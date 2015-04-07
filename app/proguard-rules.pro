@@ -16,6 +16,9 @@
 #   public *;
 #}
 
+-dontwarn android.support.**
+-dontwarn org.springframework.**
+
 -keep class * extends java.util.ListResourceBundle {
     protected Object[][] getContents();
 }
@@ -31,4 +34,13 @@
 
 -keepnames class * implements android.os.Parcelable {
     public static final ** CREATOR;
+}
+
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
 }

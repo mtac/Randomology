@@ -15,6 +15,7 @@ import android.telephony.SmsManager;
 import android.widget.Toast;
 
 import org.jumpingtree.randomology.R;
+import org.jumpingtree.randomology.RDApplication;
 import org.jumpingtree.randomology.fragments.ContactsListFragment;
 import org.jumpingtree.randomology.fragments.MainFragment;
 import org.jumpingtree.randomology.utils.Logger;
@@ -40,6 +41,11 @@ public class MainActivity extends ActionBarActivity implements
         setupActionBar();
 
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void setupActionBar() {

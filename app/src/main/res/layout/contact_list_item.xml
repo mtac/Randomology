@@ -38,13 +38,13 @@
               android:layout_width="match_parent"
               android:layout_height="26dp"
               android:layout_toRightOf="@android:id/icon"
+              android:layout_toEndOf="@android:id/icon"
               android:layout_alignParentBottom="true"
               android:layout_alignParentRight="true"
-              android:fontFamily="sans-serif"
+              android:layout_alignParentEnd="true"
               android:singleLine="true"
               android:ellipsize="marquee"
               android:visibility="gone"
-              android:text="@string/search_match_other"
               android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <!-- Use standard android.R class text1 id instead of app specific id. This is just useful for
@@ -58,11 +58,12 @@
               android:layout_height="wrap_content"
               android:layout_above="@android:id/text2"
               android:layout_toRightOf="@android:id/icon"
+              android:layout_toEndOf="@android:id/icon"
               android:gravity="center_vertical"
               android:layout_alignParentRight="true"
+              android:layout_alignParentEnd="true"
               android:layout_alignParentTop="true"
               android:layout_alignWithParentIfMissing="true"
-              android:fontFamily="sans-serif-light"
               android:singleLine="true"
               android:ellipsize="marquee"
               android:textAppearance="?android:attr/textAppearanceLarge"/>

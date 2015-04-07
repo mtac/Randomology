@@ -3,19 +3,13 @@ package org.jumpingtree.randomology.utils;
 import android.util.Log;
 
 import org.jumpingtree.randomology.RDApplication;
+import org.jumpingtree.randomology.config.AppConfiguration;
 
 public class Logger { 
 	  
-    public enum LogLevel { ERROR, WARNING, INFO, DEBUG, VERBOSE } 
-  
-    private static int mLevel = LogLevel.VERBOSE.ordinal(); 
+    public enum LogLevel { ERROR, WARNING, INFO, DEBUG, VERBOSE }
       
-    public static void setMaxLevel(int level) { 
-        mLevel  = level; 
-    } 
-      
-    public static void log(LogLevel level, String TAG, String text) { 
-        if (level.ordinal() > mLevel) { return; } 
+    public static void log(LogLevel level, String TAG, String text) {
         
         String msg = RDApplication.APP_TAG + " | " + TAG + " | " +  text;
         
@@ -23,14 +17,13 @@ public class Logger {
         case ERROR: 	Log.e(RDApplication.APP_TAG, msg); break;
         case WARNING: 	Log.w(RDApplication.APP_TAG, msg); break;
         case INFO: 		Log.i(RDApplication.APP_TAG, msg); break;
-        case DEBUG: 	Log.d(RDApplication.APP_TAG, msg); break;
+        case DEBUG: 	if(AppConfiguration.DEBUG){Log.d(RDApplication.APP_TAG, msg);} break;
         case VERBOSE:
-        default: 		Log.v(RDApplication.APP_TAG, msg); break;
+        default: 		if(AppConfiguration.DEBUG){Log.v(RDApplication.APP_TAG, msg);} break;
         }    
     } 
       
-    public static void log(LogLevel level, String TAG, String text, Throwable e) { 
-        if (level.ordinal() > mLevel) { return; }
+    public static void log(LogLevel level, String TAG, String text, Throwable e) {
 
         String msg = RDApplication.APP_TAG + " | " + TAG + " | " +  text;
         
@@ -38,9 +31,9 @@ public class Logger {
         case ERROR: 	Log.e(RDApplication.APP_TAG, msg, e); break;
         case WARNING: 	Log.w(RDApplication.APP_TAG, msg, e); break;
         case INFO: 		Log.i(RDApplication.APP_TAG, msg, e); break;
-        case DEBUG: 	Log.d(RDApplication.APP_TAG, msg, e); break;
+        case DEBUG: 	if(AppConfiguration.DEBUG){Log.d(RDApplication.APP_TAG, msg, e);} break;
         case VERBOSE:
-        default: 		Log.v(RDApplication.APP_TAG, msg, e); break;
+        default: 		if(AppConfiguration.DEBUG){Log.v(RDApplication.APP_TAG, msg, e);} break;
         }    
     } 
 } 

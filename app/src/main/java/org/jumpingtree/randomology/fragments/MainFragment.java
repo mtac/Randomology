@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import org.jumpingtree.randomology.R;
 import org.jumpingtree.randomology.RDApplication;
+import org.jumpingtree.randomology.entities.ContactItem;
 import org.jumpingtree.randomology.utils.CommonUtilities;
 import org.jumpingtree.randomology.utils.DialogManager;
 import org.jumpingtree.randomology.utils.Logger;
@@ -37,7 +38,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private MainOptions mCallback;
     private Button btn_call, btn_text;
-    private List<String> contacts;
     public Context mContext;
 
     public interface MainOptions {
@@ -53,7 +53,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Let this fragment contribute menu items
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
     }
 
     @Override
@@ -66,11 +66,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         btn_call.setOnClickListener(this);
         btn_text.setOnClickListener(this);
-
-        contacts = RDApplication.getContacts();
-        if(contacts == null){
-            contacts = new ArrayList<String>();
-        }
 
         return rootView;
     }
@@ -93,24 +88,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.button_call:
-                btn_call.setEnabled(false);
-                //mCallback.startCall("916427929");//Miguel
-                mCallback.startCall("914314824");//Morais
-                btn_call.setEnabled(true);
-                break;
-            case R.id.button_text:
-                if (!contacts.isEmpty()){
-                    int pos = CommonUtilities.getRandomIntInRange(0,contacts.size() - 1);
-                    String selected_contact = contacts.get(pos);
-                    DialogManager.showMessagePromptAlertDialog(getActivity(), mCallback, selected_contact);
-                }
-                break;
-
-            default:
-                break;
-        }
+        new SelectRandomContactTask(v.getId()).execute();
     }
 
     @Override
@@ -133,6 +111,50 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class SelectRandomContactTask extends AsyncTask<Void, Void, ContactItem> {
+
+        private int id;
+
+        public SelectRandomContactTask(int id){
+            this.id = id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            DialogManager.showLoadingDialog(getActivity(), null, false);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ContactItem doInBackground(Void... params) {
+            return CommonUtilities.getRandomContact(getActivity().getApplicationContext());
+        }
+
+        @Override
+        protected void onPostExecute(ContactItem result) {
+            DialogManager.dismissLoadingDialog();
+            if(result != null) {
+                switch (this.id) {
+                    case R.id.button_call:
+                        btn_call.setEnabled(false);
+                        mCallback.startCall(result.getNumber());
+                        btn_call.setEnabled(true);
+                        break;
+                    case R.id.button_text:
+                        DialogManager.showMessagePromptAlertDialog(getActivity(), mCallback, result);
+                        break;
+
+                    default:
+                        break;
+                }
+            } else {
+                //TODO: Show contact not found dialog
+            }
+
+            super.onPostExecute(result);
+        }
     }
 
 }

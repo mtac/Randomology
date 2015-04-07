@@ -31,9 +31,20 @@ public class AdFragment extends Fragment {
         super.onActivityCreated(bundle);
         mAdView = (AdView) getView().findViewById(R.id.adView);
         adRequestBuilder = new AdRequest.Builder();
-        //adRequestBuilder.addTestDevice("24BEB71D9938C9EF293DFD186C0695E6");
         adRequest = adRequestBuilder.build();
         mAdView.loadAd(adRequest);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdView.resume();
+    }
+
+    @Override
+    public void onPause() {
+        mAdView.pause();
+        super.onPause();
     }
 
     @Override

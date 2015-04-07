@@ -12,6 +12,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 
+import org.jumpingtree.randomology.RDApplication;
+import org.jumpingtree.randomology.entities.ContactItem;
 import org.jumpingtree.randomology.utils.Logger.LogLevel;
 
 import java.util.ArrayList;
@@ -127,8 +129,8 @@ public class CommonUtilities {
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    public static List<String> getContactNumbersList(Context context) {
-        ArrayList<String> numbers = new ArrayList<String>();
+    public static List<ContactItem> getContactsList(Context context) {
+        ArrayList<ContactItem> contacts = new ArrayList<ContactItem>();
 
         ContentResolver cr = context.getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
@@ -144,30 +146,71 @@ public class CommonUtilities {
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
                             new String[]{id}, null);
                     while (pCur.moveToNext()) {
+                        String name = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
                         String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String photo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO_URI));
 
                         //Remove non numeric or plus chars
                         phone = phone.replaceAll("[^\\d+]", "");
 
-                        numbers.add(phone.trim());
+                        contacts.add(new ContactItem(id,name,phone.trim(),photo));
                         //Logger.log(LogLevel.DEBUG, "MainFragment", "Number: " + phone.trim());
                     }
-                    pCur.close();
+                    if (!pCur.isClosed()) {
+                        pCur.close();
+                    }
                 }
             }
         }
         if (!cur.isClosed()) {
             cur.close();
         }
-        return numbers;
+        return contacts;
     }
 
-    public static String getContactSelectionQueryForList(List<String> list) {
-        String query = "";
+    public static ContactItem getRandomContact(Context context) {
+        ContactItem result = null;
+        ContentResolver cr = context.getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        int size = cur.getCount();
+        boolean found = false;
+        Random rnd = new Random();
+        while(!found) {
+            int index = rnd.nextInt(size);
+            cur.moveToPosition(index);
+            String contactId = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+            String name = cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+            found = Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0;
+            if(RDApplication.isIdBlocked(contactId)){
+                found = false;
+            }
+            if (found) {
+                Cursor phones = context.getContentResolver().query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ contactId, null, null);
+                while (phones.moveToNext()) {
+                    String phoneNumber = phones.getString(phones.getColumnIndex( ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String photo = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO_URI));
 
+                    //Remove non numeric or plus chars
+                    phoneNumber = phoneNumber.replaceAll("[^\\d+]", "");
 
+                    result = new ContactItem(contactId, name, phoneNumber, photo);
+                }
+                if (!phones.isClosed()) {
+                    phones.close();
+                }
+            }
+        }
+        if (!cur.isClosed()) {
+            cur.close();
+        }
 
-        return query;
+        Logger.log(LogLevel.DEBUG,TAG,"getRandomContact - id: " + result.getId());
+        Logger.log(LogLevel.DEBUG,TAG,"getRandomContact - name: " + result.getName());
+        Logger.log(LogLevel.DEBUG,TAG,"getRandomContact - number: " + result.getNumber());
+        Logger.log(LogLevel.DEBUG,TAG,"getRandomContact - photo: " + result.getPhoto());
+        return result;
     }
 
     /**

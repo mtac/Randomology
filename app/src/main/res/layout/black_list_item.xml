@@ -35,7 +35,6 @@
               android:singleLine="true"
               android:ellipsize="marquee"
               android:visibility="gone"
-              android:text="@string/search_match_other"
               android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <TextView android:id="@android:id/text1"

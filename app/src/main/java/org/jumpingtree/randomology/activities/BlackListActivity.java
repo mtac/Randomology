@@ -6,15 +6,23 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.SmsManager;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.UiThread;
 import org.jumpingtree.randomology.R;
+import org.jumpingtree.randomology.RDApplication;
+import org.jumpingtree.randomology.bus.models.DatabaseResult;
+import org.jumpingtree.randomology.database.DatabaseAdapter;
+import org.jumpingtree.randomology.database.DatabaseHelper;
 import org.jumpingtree.randomology.fragments.BlackListFragment;
 import org.jumpingtree.randomology.fragments.ContactsListFragment;
 import org.jumpingtree.randomology.fragments.MainFragment;
@@ -31,15 +39,28 @@ public class BlackListActivity extends ActionBarActivity implements
 
     private boolean isContactListOpen;
 
+    private DatabaseAdapter database = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Register the BUS
+        RDApplication.getEventBus().register(this);
 
         setupActionBar();
 
         setContentView(R.layout.activity_black_list);
 
         switchContent(new BlackListFragment(), true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Unregister the BUS
+        RDApplication.getEventBus().unregister(this);
     }
 
     private void setupActionBar() {
