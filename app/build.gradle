@@ -10,8 +10,15 @@ android {
         applicationId "org.jumpingtree.randomology"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 1423101
+        versionName "1.0.1"
+
+        /*
+                android:versionCode="AASSPPP"
+        AA -> android:minSdkVersion (Example: 14 is sdk version 14 (android 4.0))
+        SS -> screen size (Example: 12 is small-normal, 23 is normal-large, 34 is large-xlarge)
+        PPP -> android:versionName (Example: 100 is 1.0.0)
+        */
     }
     buildTypes {
         release {

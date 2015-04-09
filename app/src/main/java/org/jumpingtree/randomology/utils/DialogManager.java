@@ -180,8 +180,16 @@ public class DialogManager {
                     if (!send.isEnabled()) {
                         CommonUtilities.setViewEnabled(send, true);
                     }
+                    if (fl.isEnabled()) {
+                        CommonUtilities.setViewEnabled(fl, false);
+                    }
                 } else {
-                    CommonUtilities.setViewEnabled(send, false);
+                    if (!fl.isEnabled()) {
+                        CommonUtilities.setViewEnabled(fl, true);
+                    }
+                    if (send.isEnabled()) {
+                        CommonUtilities.setViewEnabled(send, false);
+                    }
                 }
             }
 

@@ -28,4 +28,8 @@
     <!-- Used for the AlphabetIndexer in ContactsListFragment to provide quick navigation by
          alphabet using ListView fast scroll. -->
     <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
+    <string name="callPath">Send\u0020Make\u0020Call</string>
+    <string name="smsPath">Send\u0020SMS</string>
+
 </resources>

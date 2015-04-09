@@ -18,6 +18,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.jumpingtree.randomology.R;
 import org.jumpingtree.randomology.RDApplication;
 import org.jumpingtree.randomology.entities.ContactItem;
@@ -136,19 +139,29 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(ContactItem result) {
             DialogManager.dismissLoadingDialog();
             if(result != null) {
+
+                //Analytics
+                Tracker t = ((RDApplication) getActivity().getApplication()).getTracker(
+                        RDApplication.TrackerName.APP_TRACKER);
+
                 switch (this.id) {
                     case R.id.button_call:
                         btn_call.setEnabled(false);
                         mCallback.startCall(result.getNumber());
                         btn_call.setEnabled(true);
+                        t.setScreenName(getString(R.string.callPath));
+                        t.send(new HitBuilders.AppViewBuilder().build());
                         break;
                     case R.id.button_text:
                         DialogManager.showMessagePromptAlertDialog(getActivity(), mCallback, result);
+                        t.setScreenName(getString(R.string.smsPath));
+                        t.send(new HitBuilders.AppViewBuilder().build());
                         break;
 
                     default:
                         break;
                 }
+
             } else {
                 //TODO: Show contact not found dialog
             }
