@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "711280363920",
+    "firebase_url": "https://project-3100152554231347917.firebaseio.com",
+    "project_id": "project-3100152554231347917",
+    "storage_bucket": "project-3100152554231347917.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711280363920:android:418295c0256dde6b",
+        "android_client_info": {
+          "package_name": "org.jumpingtree.randomology"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711280363920-k541mqqccoo2idgdmhrs27lq0ur5v184.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBx3x-qCJKqEjSIsSNyqvltx7WKw6HREXQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
