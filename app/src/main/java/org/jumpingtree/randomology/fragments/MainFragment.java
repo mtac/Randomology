@@ -40,13 +40,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "MainFragment";
 
     private MainOptions mCallback;
-    private Button btn_call, btn_text;
+    private Button btn_call;
     public Context mContext;
 
     public interface MainOptions {
-        public void sendSMS(String phoneNumber, String message);
-        public void startCall(String phoneNumber);
-        public void openSettings();
+        void sendSMS(String phoneNumber, String message);
+        void startCall(String phoneNumber);
+        void openSettings();
     }
 
     public MainFragment() {
@@ -65,7 +65,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         btn_call        = (Button)      rootView.findViewById(R.id.button_call);
-        btn_text        = (Button)      rootView.findViewById(R.id.button_text);
+        Button btn_text = (Button) rootView.findViewById(R.id.button_text);
 
         btn_call.setOnClickListener(this);
         btn_text.setOnClickListener(this);
@@ -140,22 +140,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             DialogManager.dismissLoadingDialog();
             if(result != null) {
 
-                //Analytics
-                Tracker t = ((RDApplication) getActivity().getApplication()).getTracker(
-                        RDApplication.TrackerName.APP_TRACKER);
-
                 switch (this.id) {
                     case R.id.button_call:
                         btn_call.setEnabled(false);
                         mCallback.startCall(result.getNumber());
                         btn_call.setEnabled(true);
-                        t.setScreenName(getString(R.string.callPath));
-                        t.send(new HitBuilders.AppViewBuilder().build());
                         break;
                     case R.id.button_text:
                         DialogManager.showMessagePromptAlertDialog(getActivity(), mCallback, result);
-                        t.setScreenName(getString(R.string.smsPath));
-                        t.send(new HitBuilders.AppViewBuilder().build());
                         break;
 
                     default:

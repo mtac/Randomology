@@ -10,12 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
-import org.jumpingtree.randomology.RDApplication;
-import org.jumpingtree.randomology.bus.models.DatabaseResult;
 import org.jumpingtree.randomology.config.AppConfiguration;
 import org.jumpingtree.randomology.entities.ContactItem;
-
-import de.greenrobot.event.EventBus;
 
 public class DatabaseAdapter {
 
@@ -123,9 +119,6 @@ public class DatabaseAdapter {
 		}
 
 		isDatabaseReady = true;
-
-		EventBus bus = RDApplication.getEventBus();
-		bus.post(new DatabaseResult(true));
 	}
 
 	public boolean isDatabaseEmpty() {

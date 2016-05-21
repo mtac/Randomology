@@ -38,8 +38,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase paramSQLiteDatabase) {
 		String[] arrayOfString = CREATE;
 
-		for (int i = 0; i < arrayOfString.length; i++) {
-			paramSQLiteDatabase.execSQL(arrayOfString[i]);
+		for (String anArrayOfString : arrayOfString) {
+			paramSQLiteDatabase.execSQL(anArrayOfString);
 		}
 
 		Log.i(DatabaseHelper.class.getSimpleName(), "Database Created.");
@@ -101,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				databaseEmpty = false;
 			}
 		} catch (Exception e) {
-			Log.e(DatabaseHelper.class.getSimpleName().toString(),
+			Log.e(DatabaseHelper.class.getSimpleName(),
 					"isDatabaseEmpty", e);
 
 		}
@@ -112,8 +112,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void resetDatabase(SQLiteDatabase paramSQLiteDatabase) {
 		String[] arrayOfString = DROP;
 
-		for (int i = 0; i < arrayOfString.length; i++) {
-			paramSQLiteDatabase.execSQL(arrayOfString[i]);
+		for (String anArrayOfString : arrayOfString) {
+			paramSQLiteDatabase.execSQL(anArrayOfString);
 		}
 
 	}

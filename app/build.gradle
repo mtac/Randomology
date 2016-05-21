@@ -37,6 +37,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:9.0.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'org.quanqi:CircularProgress:1.0.2'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
