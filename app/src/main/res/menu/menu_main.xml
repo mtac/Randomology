@@ -8,6 +8,13 @@
         android:orderInCategory="100"
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom"
+        android:visible="false"
     />
+
+    <item android:id="@+id/action_privacy"
+        android:title="@string/privacy_policy"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        />
 
 </menu>

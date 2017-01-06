@@ -21,9 +21,13 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.jumpingtree.randomology.R;
 import org.jumpingtree.randomology.RDApplication;
 import org.jumpingtree.randomology.entities.ContactItem;
+import org.jumpingtree.randomology.events.EnableCallButtonEvent;
+import org.jumpingtree.randomology.events.EnableSMSButtonEvent;
 import org.jumpingtree.randomology.utils.CommonUtilities;
 import org.jumpingtree.randomology.utils.DialogManager;
 import org.jumpingtree.randomology.utils.Logger;
@@ -41,12 +45,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private MainOptions mCallback;
     private Button btn_call;
+    private Button btn_text;
     public Context mContext;
 
+    /**
+     * TODO: Change this callback interface to use EventBus instead
+     */
     public interface MainOptions {
         void sendSMS(String phoneNumber, String message);
         void startCall(String phoneNumber);
         void openSettings();
+        void openPrivacyPolicy();
     }
 
     public MainFragment() {
@@ -56,7 +65,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Let this fragment contribute menu items
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -64,8 +74,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        btn_call        = (Button)      rootView.findViewById(R.id.button_call);
-        Button btn_text = (Button) rootView.findViewById(R.id.button_text);
+        btn_call = (Button) rootView.findViewById(R.id.button_call);
+        btn_text = (Button) rootView.findViewById(R.id.button_text);
 
         btn_call.setOnClickListener(this);
         btn_text.setOnClickListener(this);
@@ -74,19 +84,37 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mCallback = (MainOptions) activity;
+            mCallback = (MainOptions) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement OnSendMessageListener");
         }
 
-        mContext = activity.getApplicationContext();
+        mContext = context.getApplicationContext();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEvent(EnableCallButtonEvent event) {
+        btn_call.setEnabled(event.isEnabled());
+        CommonUtilities.setViewEnabled(btn_call,event.isEnabled());
+    }
+
+    @Subscribe
+    public void onEvent(EnableSMSButtonEvent event) {
+        btn_text.setEnabled(event.isEnabled());
+        CommonUtilities.setViewEnabled(btn_text,event.isEnabled());
     }
 
     @Override
@@ -110,6 +138,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             mCallback.openSettings();
+            return true;
+        } else if (id == R.id.action_privacy) {
+            mCallback.openPrivacyPolicy();
             return true;
         }
 

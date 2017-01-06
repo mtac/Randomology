@@ -32,4 +32,22 @@
     <string name="callPath">Send\u0020Make\u0020Call</string>
     <string name="smsPath">Send\u0020SMS</string>
 
+    <string name="permissions">Permissions</string>
+    <string name="exit">Exit</string>
+    <string name="contacts_permissions">This application requires access to contact list in order to randomly select a contact.</string>
+
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_text">
+        This Privacy Policy has been created in order to disclose our information collection, use and disclosure practices for the app Randomology ("app").\n
+        \nRandomology is an app for Android phones that allows placing phone calls and the sending of SMS messages via your mobile carrier. The content of your SMS messages are only ever transported via your mobile carrier. All communication in this respect is between your mobile device and your mobile carrier. We are not involved in this communication and as such do not collect any personal information.\n
+        \nThe app requests access to the phone contacts for the sole purpose of selecting a random contact for witch to place the call or send the SMS. This data is not collected or disclosed.\n
+        \nYou accept that you may be charged by your carrier for these actions.\n
+        \nWe use Google Ads so it might collect certain non-personal information in order to provide advertisements about goods and services likely to be of greater interest to you.\n
+        \nWe use Google Analytics where we only collect non-personal information like crash reports or actions selected in the app.\n
+        \nWe may also use certain non-personal information to internally analyze, develop and improve our products.\n
+        \nWe take seriously the security of all information associated with the app and take all reasonable precautions to protect this information.\n
+        \nBy using the app, you signify your assent to our Privacy Policy. If you do not agree to this policy, please do not use the App. We reserve the right, at our discretion, to modify this policy at any time. Your continued usage of the app after any change in this Privacy Policy will constitute your acceptance of such a change.\n
+        \nLast modified: 5 January 2017\n
+    </string>
+
 </resources>

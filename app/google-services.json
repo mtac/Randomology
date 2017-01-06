@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "711280363920-koq5qffs2eqnnhlelgf60i6dn7lg1bm9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.jumpingtree.randomology",
+            "certificate_hash": "00AE448349F1440469AB3AB6CE1D6839C4B2D118"
+          }
+        },
+        {
+          "client_id": "711280363920-f3sjkl53497qk454dn70k8mli16ti3m4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.jumpingtree.randomology",
+            "certificate_hash": "39B4128C292FCDCDDAFCB8C768E6E3AC66BDFDA4"
+          }
+        },
+        {
           "client_id": "711280363920-k541mqqccoo2idgdmhrs27lq0ur5v184.apps.googleusercontent.com",
           "client_type": 3
         }

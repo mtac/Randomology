@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import org.jumpingtree.randomology.R;
 import org.jumpingtree.randomology.entities.ContactItem;
 import org.jumpingtree.randomology.fragments.MainFragment;
+import org.jumpingtree.randomology.fragments.PrivacyPolicyDialog;
 
 /**
  * Created by Miguel on 18/01/2015.
@@ -294,6 +298,25 @@ public class DialogManager {
             }
         } catch (Exception e) {
             Logger.log(Logger.LogLevel.WARNING, TAG, "Error discarding progress dialog");
+        }
+    }
+
+    public static void showPrivacyPolicyDialog(AppCompatActivity activity, boolean mIsLargeLayout) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        PrivacyPolicyDialog newFragment = new PrivacyPolicyDialog();
+
+        if (mIsLargeLayout) {
+            // The device is using a large layout, so show the fragment as a dialog
+            newFragment.show(fragmentManager, "privacy_dialog");
+        } else {
+            // The device is smaller, so show the fragment fullscreen
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(android.R.id.content, newFragment)
+                    .addToBackStack(null).commit();
         }
     }
 }
