@@ -38,9 +38,19 @@
 
 -keepclassmembers class ** {
     public void onEvent*(**);
+    @org.greenrobot.eventbus.Subscribe <methods>;
 }
 
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
+}
+
+-keepattributes *Annotation*
+
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
 }
